@@ -1,0 +1,8 @@
+\#*#
+*.swp
+build.bat
+run.bat
+build
+deps
+.projectile
+
