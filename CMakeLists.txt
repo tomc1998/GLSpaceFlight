@@ -10,9 +10,17 @@ include_directories(${PROJECT_SOURCE_DIR})
 
 set(PROJECT_SRCS 
   ${PROJECT_SOURCE_DIR}/main.c
+  ${PROJECT_SOURCE_DIR}/game_state.c
+  ${PROJECT_SOURCE_DIR}/game_renderer.c
+  ${PROJECT_SOURCE_DIR}/input_handler_glfw.c
+  ${PROJECT_SOURCE_DIR}/input_state.c
   )
 
 add_executable(GLSpaceFlight ${PROJECT_SRCS})
+
+if (MSVC)
+  set (CMAKE_CXX_FLAGS "/W4 /Wall")
+endif (MSVC)
 
 #############################################
 # Dependencies
