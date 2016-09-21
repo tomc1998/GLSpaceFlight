@@ -1,8 +1,18 @@
+/**
+   @file game_state.h
+   @brief Contains definitions to do with game state.
+
+   This file containss definitions of structs that hold game state,
+   and methods to initialise / update the state of the game. Does not
+   include state relating to other screens, just in game state. Serves
+   as a structure to pass around functions that contains everything
+   that functions might need.
+*/
+
 #ifndef GAME_STATE_H
 #define GAME_STATE_H
 
 struct Input_State;
-typedef struct Input_State Input_State;
 
 /**
    @brief Holds all game state for running the game.
@@ -19,6 +29,9 @@ struct Game_State {
   /** Game loop runs when endflag == 0 */
   int endflag;
 };
+/**
+   @brief Typedef for convenience
+ */
 typedef struct Game_State Game_State;
 
 /**
@@ -48,7 +61,7 @@ void destroy_game_state(Game_State* state);
    @memberof Game_State
    @public
 */
-void update_game_state(Game_State* state, Input_State* input_state);
+void update_game_state(Game_State* state, struct Input_State* input_state);
 
 #endif
 

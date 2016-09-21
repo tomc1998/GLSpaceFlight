@@ -1,3 +1,12 @@
+/**
+   @file input_state.h
+   @brief Contains definitions of thing to do with input.
+
+   This file contains definitions of structs to do with what controls
+   are currently active and what their values are. The input state is
+   modified by handlers such as the one found in input_handler_glfw.h.
+*/
+
 #ifndef INPUT_STATE_H
 #define INPUT_STATE_H
 
@@ -29,6 +38,9 @@ struct Digital_Input_State {
   /** True when control has just been pressed (rather than held) */
   int ctrl_dbg_quit_just_pressed;
 };
+/**
+   @brief Typedef for convenience
+ */
 typedef struct Digital_Input_State Digital_Input_State;
 
 /**
@@ -40,6 +52,9 @@ struct Input_State {
   /** The binary input (on/off) controls */
   Digital_Input_State digital_input_state;
 };
+/**
+   @brief Typedef for convenience
+ */
 typedef struct Input_State Input_State;
 
 /**

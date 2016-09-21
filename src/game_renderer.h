@@ -1,3 +1,11 @@
+/**
+   @file game_renderer.h
+   @brief Contains code to render the game. 
+
+   This file does not include code to render other screens such as
+   menus, just the in game models and images.
+*/
+
 #ifndef GAME_RENDERER_H
 #define GAME_RENDERER_H
 
@@ -10,12 +18,15 @@ struct Game_State;
    this renderer's settings.
    
    Does NOT contain data about the bounds of the game. This is contained in Game_State.
- */
+*/
 struct Game_Renderer {
-  /** Renderer doesn't contain any data yet, leaving this here to compile */
-  int dummy;
+/** Renderer doesn't contain any data yet, leaving this here to compile */
+int dummy;
 };
 
+/**
+   @brief Typedef for convenience
+ */
 typedef struct Game_Renderer Game_Renderer;
 
 /**

@@ -1,6 +1,7 @@
 /**
     @file input_handler_glfw.h
-    Contains functions to handler input events from GLFW.
+    @brief Contains functions to handler input events from GLFW.
+
     Must call set_input_handler_control_mapping() before this will
     handle any input.
 */
