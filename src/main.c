@@ -42,21 +42,40 @@ int main(int argc, char** argv) {
   Input_Control_Mapping_GLFW* control_mapping =
     (Input_Control_Mapping_GLFW*) malloc(sizeof(Input_Control_Mapping_GLFW));;
   init_input_control_mapping_glfw(control_mapping, input_state);
+  /* Create game renderer */
+  Game_Renderer* game_renderer =
+    (Game_Renderer*) malloc(sizeof(Game_Renderer));
+  init_game_renderer(game_renderer);
 
+  /* Set up input handler and assign key callbacks */
   set_input_handler_control_mapping(control_mapping);
   glfwSetKeyCallback(window, glfw_key_callback);
 
   while(!game_state->endflag) {
+    /* Update game state */
     update_game_state(game_state, input_state);
-    render_game(game_state);
+    /* Render game */
+    render_game(game_renderer, game_state);
+    /* Flip buffers, poll events */
     glfwSwapBuffers(window);
     glfwPollEvents();
+    /* If window should close, exit game loop */
     if (glfwWindowShouldClose(window)) {
       break;
     }
   }
 
+  destroy_game_state(game_state);
   free(game_state);
+  destroy_input_control_mapping_glfw(control_mapping);
+  free(control_mapping);
+  destroy_input_state(input_state);
+  free(input_state);
+  destroy_game_renderer(game_renderer);
+  free(game_renderer);
+
+  glfwDestroyWindow(window);
+  glfwTerminate();
 
   return 0;
 }

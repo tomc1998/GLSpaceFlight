@@ -2,7 +2,7 @@
 #include "input_state.h"
 
 void update_game_state(Game_State* state, Input_State* input_state) {
-  if (input_state->ctrl_dbg_quit) {
+  if (input_state->digital_input_state.ctrl_dbg_quit) {
     state->endflag = 1;
   }
 }
@@ -15,4 +15,6 @@ void init_game_state(Game_State* state,
   state->endflag = 0;
 }
                        
+void destroy_game_state(Game_State* state) {
+}
 

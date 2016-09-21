@@ -5,7 +5,6 @@ struct Input_State;
 typedef struct Input_State Input_State;
 
 /**
-   @struct Game_State game_state.h "game_state.h"
    @brief Holds all game state for running the game.
 
    Pass to Game_Renderer to render to the screen. The renderer will
@@ -23,7 +22,6 @@ struct Game_State {
 typedef struct Game_State Game_State;
 
 /**
-   @fn void init_game_state(Game_State* state, const int screen_w, const int screen_h)
    @brief Initialises the game state.
    @param[out] state The state object to initialise. Caller allocated.
    @param[in] screen_w The width of the game screen in pixels.
@@ -36,7 +34,14 @@ void init_game_state(Game_State* state,
                      const int screen_h);
 
 /**
-   @fn void update_game_state(Game_State* state, Input_State* input_state);
+   @brief Frees any resources owned by Game_State.
+   @param[in] state The Game_State object to destroy.
+   @memberof Game_State
+   @public
+*/
+void destroy_game_state(Game_State* state);
+
+/**
    @brief Updates the game state.
    @param[in] state The pointer to the game state to update.
    @param[in] input_state The pointer to the input state currently in use

@@ -9,7 +9,7 @@ void init_input_control_mapping_glfw(Input_Control_Mapping_GLFW*
                                      control_mapping,
                                      Input_State* input_state) {
   /* Figure out the size of memory to allocate for inputs and
-  controls*/
+  controls i*/
   control_mapping->num_mappings = get_num_controls();
   const size_t size_to_alloc_inputs =
     control_mapping->num_mappings*sizeof(int);
@@ -26,9 +26,9 @@ void init_input_control_mapping_glfw(Input_Control_Mapping_GLFW*
   control_mapping->inputs[0] = GLFW_KEY_W;
   control_mapping->inputs[1] = GLFW_KEY_S;
   control_mapping->inputs[2] = GLFW_KEY_ESCAPE;
-  control_mapping->controls[0] = &(input_state->ctrl_thrust);
-  control_mapping->controls[1] = &(input_state->ctrl_brake);
-  control_mapping->controls[2] = &(input_state->ctrl_dbg_quit);
+  control_mapping->controls[0] = &(input_state->digital_input_state.ctrl_thrust);
+  control_mapping->controls[1] = &(input_state->digital_input_state.ctrl_brake);
+  control_mapping->controls[2] = &(input_state->digital_input_state.ctrl_dbg_quit);
 }
 
 void destroy_input_control_mapping_glfw(Input_Control_Mapping_GLFW*
@@ -49,7 +49,7 @@ void glfw_key_callback(GLFWwindow* w,
                        int mods) {
   /* Loop through inputs, find the respective control */
   int ii = 0;
-  for (; ii < control_mapping->num_controls; ++ii) {
+  for (; ii < control_mapping->num_mappings; ++ii) {
     if (control_mapping->inputs[ii] == key) {
       int* control = control_mapping->controls[ii];
       if (action == GLFW_PRESS) {
