@@ -8,6 +8,7 @@
 
 #ifndef GAME_RENDERER_H
 #define GAME_RENDERER_H
+#include <GLFW/glfw3.h>
 
 struct Game_State;
 
@@ -20,8 +21,7 @@ struct Game_State;
    Does NOT contain data about the bounds of the game. This is contained in Game_State.
 */
 struct Game_Renderer {
-/** Renderer doesn't contain any data yet, leaving this here to compile */
-int dummy;
+	GLuint vba, vbo;
 };
 
 /**

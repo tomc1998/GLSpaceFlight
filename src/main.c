@@ -1,10 +1,11 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include "game_state.h"
 #include "input_state.h"
 #include "input_handler_glfw.h"
 #include "game_renderer.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <GLFW/glfw3.h>
 
 /**
    @fn GLFWwindow* init_glfw(const char* title, int screen_w, int screen_h)
@@ -17,13 +18,29 @@
    Makes the window's GL context current for the thread running this function.
 */
 GLFWwindow* init_glfw(const char* title, int screen_w, int screen_h) {
+	/* Init GLFW */
   glfwInit();
+	/* Set GLFW to try and use OpenGL 3.3 */
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	/* We need this! This will stop us using deprecated functionality, and the */
+	/* mesa drivers on linux only support GL 3.3 core profile, not compatibility! */
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   GLFWwindow* window = glfwCreateWindow(screen_w,
                                         screen_h,
                                         "Title",
                                         NULL,
                                         NULL);
+	/* Set current context to be the window we just created, allows GL functions */
+	/* to affect this window's frame */
   glfwMakeContextCurrent(window);
+
+  /* Load OpenGL extensions with GLAD */
+  if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
+		printf("Can't load OpenGL extensions\n");
+  }
+  printf("OpenGL Ver - %d.%d\n", GLVersion.major, GLVersion.minor);
+
   return window;
 }
 
