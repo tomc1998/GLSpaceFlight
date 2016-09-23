@@ -1,7 +1,9 @@
 \#*#
 *.swp
 build.bat
+build.sh
 run.bat
+run.sh
 build
 deps
 docs

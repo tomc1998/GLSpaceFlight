@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.0)
 
 project (GLSpaceFlight)
 
@@ -6,19 +6,20 @@ set(PROJECT_ROOT_DIR ${CMAKE_SOURCE_DIR})
 set(PROJECT_SOURCE_DIR ${PROJECT_ROOT_DIR}/src)
 set(PROJECT_DEP_DIR ${PROJECT_ROOT_DIR}/deps)
 
-
-include_directories(${PROJECT_SOURCE_DIR})
-include_directories(${PROJECT_ROOT_DIR}/include)
-
 set(PROJECT_SRCS 
 	${PROJECT_SOURCE_DIR}/main.c
 	${PROJECT_SOURCE_DIR}/game_state.c
 	${PROJECT_SOURCE_DIR}/game_renderer.c
 	${PROJECT_SOURCE_DIR}/input_handler_glfw.c
 	${PROJECT_SOURCE_DIR}/input_state.c
+	${PROJECT_SOURCE_DIR}/file.c
+	${PROJECT_SOURCE_DIR}/shader.c
 	)
 
 add_executable(GLSpaceFlight ${PROJECT_SRCS})
+
+target_include_directories(GLSpaceFlight PUBLIC ${PROJECT_SOURCE_DIR})
+target_include_directories(GLSpaceFlight PUBLIC ${PROJECT_ROOT_DIR}/include)
 
 #############################################
 # Dependencies
@@ -31,8 +32,9 @@ set(GLAD_SRCS
 	${GLAD_SOURCE_DIR}/glad.c
 	)
 add_library(glad STATIC ${GLAD_SRCS})
+target_include_directories(glad PUBLIC ${GLAD_SOURCE_DIR}/include)
 target_link_libraries(GLSpaceFlight glad)
-include_directories(${GLAD_SOURCE_DIR}/include)
+target_include_directories(GLSpaceFlight PUBLIC ${GLAD_SOURCE_DIR}/include)
 
 # GLFW #############################################
 # Make sure GLFW doesn't build examples / tests / docs
@@ -43,7 +45,7 @@ set (GLFW_BUILD_DOCS OFF)
 set (GLFW_VULKAN_STATIC OFF)
 add_subdirectory(${PROJECT_DEP_DIR}/glfw)
 target_link_libraries(GLSpaceFlight glfw)
-include_directories(${PROJECT_DEP_DIR}/glfw/include)
+target_include_directories(GLSpaceFlight PUBLIC ${PROJECT_DEP_DIR}/glfw/include)
 
 ####################################################
 
