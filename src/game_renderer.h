@@ -23,6 +23,8 @@ struct Game_State;
 struct Game_Renderer {
 	GLuint vao, vbo;
   GLuint test_shader_program;
+  float proj_mat[16];
+  GLuint shader_proj_mat_loc;
 };
 
 /**

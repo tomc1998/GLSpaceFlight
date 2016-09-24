@@ -8,13 +8,13 @@ static Input_Control_Mapping_GLFW* control_mapping;
 void init_input_control_mapping_glfw(Input_Control_Mapping_GLFW*
                                      control_mapping,
                                      Input_State* input_state) {
+  size_t size_to_alloc_inputs = 0;
+  size_t size_to_alloc_controls = 0;
   /* Figure out the size of memory to allocate for inputs and
   controls i*/
   control_mapping->num_mappings = get_num_controls();
-  const size_t size_to_alloc_inputs =
-    control_mapping->num_mappings*sizeof(int);
-  const size_t size_to_alloc_controls =
-    control_mapping->num_mappings*sizeof(int*);
+  size_to_alloc_inputs = control_mapping->num_mappings*sizeof(int);
+  size_to_alloc_controls = control_mapping->num_mappings*sizeof(int*);
 
   /* Allocate memory */
   control_mapping->inputs =
@@ -54,9 +54,9 @@ void glfw_key_callback(GLFWwindow* w,
       int* control = control_mapping->controls[ii];
       if (action == GLFW_PRESS) {
         if (*control == 0) {
-          *(control + 1) = 1; // Set just pressed
+          *(control + 1) = 1; /* Set just pressed */
         }
-        *control = 1; // Set control state
+        *control = 1; /* Set control state */
       }
       else {
         *control = 0;

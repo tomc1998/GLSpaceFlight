@@ -14,6 +14,7 @@ set(PROJECT_SRCS
 	${PROJECT_SOURCE_DIR}/input_state.c
 	${PROJECT_SOURCE_DIR}/file.c
 	${PROJECT_SOURCE_DIR}/shader.c
+	${PROJECT_SOURCE_DIR}/matrix.c
 	)
 
 add_executable(GLSpaceFlight ${PROJECT_SRCS})

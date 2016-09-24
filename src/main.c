@@ -18,26 +18,25 @@
    Makes the window's GL context current for the thread running this function.
 */
 GLFWwindow* init_glfw(const char* title, int screen_w, int screen_h) {
-	/* Init GLFW */
+  GLFWwindow* window = NULL;
+  /* Init GLFW */
   glfwInit();
-	/* Set GLFW to try and use OpenGL 3.3 */
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	/* We need this! This will stop us using deprecated functionality, and the */
-	/* mesa drivers on linux only support GL 3.3 core profile, not compatibility! */
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  GLFWwindow* window = glfwCreateWindow(screen_w,
-                                        screen_h,
-                                        "Title",
-                                        NULL,
-                                        NULL);
-	/* Set current context to be the window we just created, allows GL functions */
-	/* to affect this window's frame */
+  /* Set GLFW to try and use OpenGL 3.3 */
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+  /* We need this! This will stop us using deprecated functionality, and the */
+  /* mesa drivers on linux only support GL 3.3 core profile, not compatibility! */
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  window = glfwCreateWindow(screen_w, screen_h,
+                            "Title",
+                            NULL, NULL);
+  /* Set current context to be the window we just created, allows GL functions */
+  /* to affect this window's frame */
   glfwMakeContextCurrent(window);
 
   /* Load OpenGL extensions with GLAD */
   if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
-		printf("Can't load OpenGL extensions\n");
+    printf("Can't load OpenGL extensions\n");
   }
   printf("OpenGL Ver - %d.%d\n", GLVersion.major, GLVersion.minor);
 
@@ -48,20 +47,25 @@ GLFWwindow* init_glfw(const char* title, int screen_w, int screen_h) {
    Game entry point.
 */
 int main(int argc, char** argv) {
+  Game_State* game_state = NULL;
+  Game_Renderer* game_renderer = NULL;
+  GLFWwindow* window = NULL;
+  Input_State* input_state = NULL;
+  Input_Control_Mapping_GLFW* control_mapping = NULL;
+
   /* Create game state */
-  Game_State* game_state = (Game_State*) malloc(sizeof(Game_State));
+  game_state = (Game_State*) malloc(sizeof(Game_State));
   init_game_state(game_state, 800, 600);
   /* Create game window */
-  GLFWwindow* window = init_glfw("GLSpaceFlight", game_state->screen_w, game_state->screen_h);
+  window = init_glfw("GLSpaceFlight", game_state->screen_w, game_state->screen_h);
   /* Create control mapping */
-  Input_State* input_state = (Input_State*) malloc(sizeof(Input_State));
+  input_state = (Input_State*) malloc(sizeof(Input_State));
   init_input_state(input_state);
-  Input_Control_Mapping_GLFW* control_mapping =
-    (Input_Control_Mapping_GLFW*) malloc(sizeof(Input_Control_Mapping_GLFW));;
+  control_mapping =
+    (Input_Control_Mapping_GLFW*) malloc(sizeof(Input_Control_Mapping_GLFW));
   init_input_control_mapping_glfw(control_mapping, input_state);
   /* Create game renderer */
-  Game_Renderer* game_renderer =
-    (Game_Renderer*) malloc(sizeof(Game_Renderer));
+  game_renderer = (Game_Renderer*) malloc(sizeof(Game_Renderer));
   init_game_renderer(game_renderer);
 
   /* Set up input handler and assign key callbacks */
