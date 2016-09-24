@@ -15,16 +15,16 @@ struct aiScene;
  */
 struct Mesh {
   /** Vertex buffer */
-  GLuint v_buf;
-  /** Normal buffer */
-  GLuint n_buf;
-  /** Index buffer */
-  GLuint i_buf;
+  GLuint vbo;
+  /** Element buffer */
+  GLuint e_buf;
   /** Vertex array object for this mesh */
   GLuint vao;
 
+  /** Number of vertices in this mesh */
   unsigned num_vertices;
-  unsigned num_indices;
+  /** Number of elements in this mesh */
+  unsigned num_elements;
 };
 /**
    @brief Typedef for convenience

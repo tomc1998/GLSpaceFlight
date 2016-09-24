@@ -7,11 +7,6 @@
 #include "game_renderer.h"
 
 void init_game_renderer(Game_Renderer* game_renderer) {
-  /* VBO Test data */
-  float test_data[] = {
-    0, 0, -5, 1, 0, -5, 1, 1, -5
-  };
-
   /* Test shaders */
   const char* v_shader = " \n \
 #version 330 core \n \
@@ -32,13 +27,6 @@ void main(){ \n \
 } \n \
   ";
 
-  /* Setup VAO */
-  glGenVertexArrays(1, &(game_renderer->vao));
-  glBindVertexArray(game_renderer->vao);
-  glGenBuffers(1, &(game_renderer->vbo));
-  glBindBuffer(GL_ARRAY_BUFFER, game_renderer->vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(test_data), &(test_data[0]), GL_STATIC_DRAW);
-
   /* Load test shader */
   game_renderer->test_shader_program =
     load_shader_program_from_src(v_shader,
@@ -54,45 +42,34 @@ void main(){ \n \
   game_renderer->shader_proj_mat_loc = /* Projection matrix */
     glGetUniformLocation(game_renderer->test_shader_program, "proj_mat");
 
+  /* Load uniforms to GPU */
+  glUniformMatrix4fv(game_renderer->shader_proj_mat_loc,
+                     1,
+                     GL_TRUE,
+                     &(game_renderer->proj_mat[0]));
+
   /* Set up depth testing */
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LEQUAL);
-
 }
 
 void destroy_game_renderer(Game_Renderer* game_renderer) {
 }
 
-void render_game(Game_Renderer* game_renderer, Game_State* s) {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glUniformMatrix4fv(game_renderer->shader_proj_mat_loc,
-                     1,
-                     GL_TRUE,
-                     &(game_renderer->proj_mat[0]));
-  /*glBindVertexArray(game_renderer->vao);
+void render_mesh(Game_Renderer* game_renderer, Mesh* m) {
+  glBindVertexArray(m->vao);
   glEnableVertexAttribArray(0);
-  glBindBuffer(GL_ARRAY_BUFFER, game_renderer->vbo);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-  glDrawArrays(GL_TRIANGLES, 0, 3);
-  glDisableVertexAttribArray(0); */
-
-  glBindVertexArray(game_renderer->test_mesh->vao);
-  glEnableVertexAttribArray(0);
-  glBindBuffer(GL_ARRAY_BUFFER, game_renderer->test_mesh->v_buf);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,
-               game_renderer->test_mesh->i_buf);
-  glVertexAttribPointer(0,
-                        3,
-                        GL_FLOAT,
-                        GL_FALSE,
-                        0,
-                        (void*)0);
   glDrawElements(GL_TRIANGLES,
-                 game_renderer->test_mesh->num_indices,
+                 m->num_elements,
                  GL_UNSIGNED_INT,
                  (void*)0);
   glDisableVertexAttribArray(0);
-  
+}
+
+void render_game(Game_Renderer* game_renderer, Game_State* s) {
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+  render_mesh(game_renderer, game_renderer->test_mesh);
 }
 
 

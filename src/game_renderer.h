@@ -22,7 +22,6 @@ struct Game_State;
    Does NOT contain data about the bounds of the game. This is contained in Game_State.
 */
 struct Game_Renderer {
-	GLuint vao, vbo;
   GLuint test_shader_program;
   float proj_mat[16];
   GLuint shader_proj_mat_loc;
