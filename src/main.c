@@ -1,4 +1,8 @@
 #include <stdio.h>
+#include <assimp/scene.h>
+#include <assimp/cimport.h>
+#include <assimp/postprocess.h>
+#include <assimp/mesh.h>
 #include <stdlib.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -6,6 +10,7 @@
 #include "input_state.h"
 #include "input_handler_glfw.h"
 #include "game_renderer.h"
+#include "mesh.h"
 
 /**
    @fn GLFWwindow* init_glfw(const char* title, int screen_w, int screen_h)
@@ -44,6 +49,62 @@ GLFWwindow* init_glfw(const char* title, int screen_w, int screen_h) {
 }
 
 /**
+   Test function, load a mesh
+ */
+Mesh* load_mesh(const char* path) {
+  const struct aiScene* scene = load_ai_scene_from_file(path);
+  const struct aiMesh* mesh;
+  printf("Num meshes: %d", scene->mNumMeshes);
+  mesh = scene->mMeshes[0];
+
+  printf("Num verts: %d", mesh->mNumVertices);
+  printf("Num faces: %d", mesh->mNumFaces);
+
+  /* Turn ai vertex data into a float array */
+  float* verts = malloc(sizeof(float)*3*mesh->mNumVertices);
+  int ii = 0;
+  for (; ii < mesh->mNumVertices; ++ii) {
+    verts[ii*3] = mesh->mVertices[ii].x;
+    verts[ii*3 + 1] = mesh->mVertices[ii].y;
+    verts[ii*3 + 2] = mesh->mVertices[ii].z;
+  }
+  /* Turn ai face data into a uint array (vertex indices) */
+  unsigned int *indices =
+    (unsigned int*) malloc(sizeof(int) * mesh->mNumFaces * 3);
+  for(int i = 0; i < mesh->mNumFaces; i ++) {
+    indices[i * 3] = mesh->mFaces[i].mIndices[0];
+    indices[i * 3 + 1] = mesh->mFaces[i].mIndices[1];
+    indices[i * 3 + 2] = mesh->mFaces[i].mIndices[2];
+  }
+
+  /* Create mesh */
+  Mesh* m = (Mesh*)malloc(sizeof(Mesh));
+  glGenVertexArrays(1, &(m->vao));
+  glBindVertexArray(m->vao);
+  m->num_vertices = mesh->mNumVertices;
+  m->num_indices = mesh->mNumFaces * 3;
+  /* Buffer vertex data */
+  glGenBuffers(1, &(m->v_buf));
+  glBindBuffer(GL_ARRAY_BUFFER, m->v_buf);
+  glBufferData(GL_ARRAY_BUFFER,
+               mesh->mNumVertices*3*sizeof(GLfloat),
+               verts,
+               GL_STATIC_DRAW);
+  /* Buffer index data */
+  glGenBuffers(1, &(m->i_buf));
+  glBindBuffer(GL_ARRAY_BUFFER, m->i_buf);
+  glBufferData(GL_ARRAY_BUFFER,
+               mesh->mNumFaces*3*sizeof(GLfloat),
+               indices,
+               GL_STATIC_DRAW);
+  glBindVertexArray(0);
+
+  /* Cleanup */
+  aiReleaseImport(scene);
+  return m;
+}
+
+/**
    Game entry point.
 */
 int main(int argc, char** argv) {
@@ -71,6 +132,8 @@ int main(int argc, char** argv) {
   /* Set up input handler and assign key callbacks */
   set_input_handler_control_mapping(control_mapping);
   glfwSetKeyCallback(window, glfw_key_callback);
+
+  game_renderer->test_mesh = load_mesh("Monkey.fbx");
 
   while(!game_state->endflag) {
     /* Update game state */

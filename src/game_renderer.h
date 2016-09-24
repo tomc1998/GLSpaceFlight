@@ -9,6 +9,7 @@
 #ifndef GAME_RENDERER_H
 #define GAME_RENDERER_H
 #include <GLFW/glfw3.h>
+#include "mesh.h"
 
 struct Game_State;
 
@@ -25,6 +26,7 @@ struct Game_Renderer {
   GLuint test_shader_program;
   float proj_mat[16];
   GLuint shader_proj_mat_loc;
+  Mesh* test_mesh;
 };
 
 /**
