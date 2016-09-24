@@ -37,6 +37,11 @@ target_include_directories(glad PUBLIC ${GLAD_SOURCE_DIR}/include)
 target_link_libraries(GLSpaceFlight glad)
 target_include_directories(GLSpaceFlight PUBLIC ${GLAD_SOURCE_DIR}/include)
 
+# ASSIMP ###########################################
+add_subdirectory(${PROJECT_ROOT_DIR}/assimp)
+target_link_libraries(GLSpaceFlight assimp)
+target_include_directories(GLSpaceFlight PUBLIC ${PROJECT_DEP_DIR}/assimp/include)
+
 # GLFW #############################################
 # Make sure GLFW doesn't build examples / tests / docs
 set (GLFW_BUILD_EXAMPLES OFF)
