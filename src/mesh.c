@@ -9,32 +9,33 @@
 #include "mesh.h"
 
 Mesh* load_mesh_from_ai_mesh(const struct aiMesh* ai_mesh) {
-  printf("Num verts: %d\n", ai_mesh->mNumVertices);
-  printf("Num faces: %d\n", ai_mesh->mNumFaces);
+  float* verts = NULL; /* Nicely formatted vert data */
+  unsigned int* elements = NULL; /* Nicely formatted element data */
+  Mesh* m; /* The mesh to load data into */
+  int ii;
 
   /* Turn ai vertex data into a float array */
-  float* verts = malloc(sizeof(float)*3*ai_mesh->mNumVertices);
-  int ii = 0;
-  for (; ii < ai_mesh->mNumVertices; ++ii) {
+  verts = (float*) malloc(sizeof(float)*3*ai_mesh->mNumVertices);
+  for (ii = 0; ii < ai_mesh->mNumVertices; ++ii) {
     verts[ii*3] = ai_mesh->mVertices[ii].x;
     verts[ii*3 + 1] = ai_mesh->mVertices[ii].y;
     verts[ii*3 + 2] = ai_mesh->mVertices[ii].z;
   }
   /* Turn ai face data into a uint array (vertex elements) */
-  unsigned int *elements =
-    (unsigned int*) malloc(sizeof(int) * ai_mesh->mNumFaces * 3);
-  for(int i = 0; i < ai_mesh->mNumFaces; i ++) {
-    elements[i * 3] = ai_mesh->mFaces[i].mIndices[0];
-    elements[i * 3 + 1] = ai_mesh->mFaces[i].mIndices[1];
-    elements[i * 3 + 2] = ai_mesh->mFaces[i].mIndices[2];
+  elements = (unsigned int*) malloc(sizeof(int) * ai_mesh->mNumFaces * 3);
+  for(ii = 0; ii < ai_mesh->mNumFaces; ii ++) {
+    elements[ii * 3] = ai_mesh->mFaces[ii].mIndices[0];
+    elements[ii * 3 + 1] = ai_mesh->mFaces[ii].mIndices[1];
+    elements[ii * 3 + 2] = ai_mesh->mFaces[ii].mIndices[2];
   }
 
   /* Create mesh */
-  Mesh* m = (Mesh*)malloc(sizeof(Mesh));
+  m = (Mesh*)malloc(sizeof(Mesh));
   glGenVertexArrays(1, &(m->vao));
   glBindVertexArray(m->vao);
   m->num_vertices = ai_mesh->mNumVertices;
   m->num_elements = ai_mesh->mNumFaces * 3;
+
   /* Buffer vertex data */
   glGenBuffers(1, &(m->vbo));
   glBindBuffer(GL_ARRAY_BUFFER, m->vbo);

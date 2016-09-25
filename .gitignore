@@ -8,5 +8,6 @@ build
 deps
 docs
 .projectile
+Monkey*
 *.fbx
 

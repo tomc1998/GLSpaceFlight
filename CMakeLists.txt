@@ -21,7 +21,7 @@ set(PROJECT_SRCS
 add_executable(GLSpaceFlight ${PROJECT_SRCS})
 
 target_include_directories(GLSpaceFlight PUBLIC ${PROJECT_SOURCE_DIR})
-target_include_directories(GLSpaceFlight PUBLIC ${PROJECT_ROOT_DIR}/include)
+target_include_directories(GLSpaceFlight SYSTEM PUBLIC ${PROJECT_ROOT_DIR}/include)
 
 #############################################
 # Dependencies
@@ -36,12 +36,12 @@ set(GLAD_SRCS
 add_library(glad STATIC ${GLAD_SRCS})
 target_include_directories(glad PUBLIC ${GLAD_SOURCE_DIR}/include)
 target_link_libraries(GLSpaceFlight glad)
-target_include_directories(GLSpaceFlight PUBLIC ${GLAD_SOURCE_DIR}/include)
+target_include_directories(GLSpaceFlight SYSTEM PUBLIC ${GLAD_SOURCE_DIR}/include)
 
 # ASSIMP ###########################################
 add_subdirectory(${PROJECT_ROOT_DIR}/assimp)
 target_link_libraries(GLSpaceFlight assimp)
-target_include_directories(GLSpaceFlight PUBLIC ${PROJECT_DEP_DIR}/assimp/include)
+target_include_directories(GLSpaceFlight SYSTEM PUBLIC ${PROJECT_ROOT_DIR}/assimp/include)
 
 # GLFW #############################################
 # Make sure GLFW doesn't build examples / tests / docs
@@ -52,7 +52,7 @@ set (GLFW_BUILD_DOCS OFF)
 set (GLFW_VULKAN_STATIC OFF)
 add_subdirectory(${PROJECT_DEP_DIR}/glfw)
 target_link_libraries(GLSpaceFlight glfw)
-target_include_directories(GLSpaceFlight PUBLIC ${PROJECT_DEP_DIR}/glfw/include)
+target_include_directories(GLSpaceFlight SYSTEM PUBLIC ${PROJECT_DEP_DIR}/glfw/include)
 
 ####################################################
 

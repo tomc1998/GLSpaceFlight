@@ -48,8 +48,20 @@ GLFWwindow* init_glfw(const char* title, int screen_w, int screen_h) {
   return window;
 }
 
+/** 
+    @brief Load a test mesh into the game_renderer. 
+*/
+void load_test_mesh(Game_Renderer* game_renderer) {
+  const struct aiScene* ai_scene =
+    load_ai_scene_from_file("Monkey.obj");
+  printf("%s\n", aiGetErrorString());
+  game_renderer->test_mesh =
+    load_mesh_from_ai_mesh(ai_scene->mMeshes[0]);
+  aiReleaseImport(ai_scene);
+}
+
 /**
-   Game entry point.
+   @brief Game entry point.
 */
 int main(int argc, char** argv) {
   Game_State* game_state = NULL;
@@ -76,12 +88,9 @@ int main(int argc, char** argv) {
   /* Set up input handler and assign key callbacks */
   set_input_handler_control_mapping(control_mapping);
   glfwSetKeyCallback(window, glfw_key_callback);
-
-  const struct aiScene* ai_scene =
-    load_ai_scene_from_file("Monkey.fbx");
-  game_renderer->test_mesh =
-    load_mesh_from_ai_mesh(ai_scene->mMeshes[0]);
-  aiReleaseImport(ai_scene);
+  
+  /* Load the test mesh to the game renderer */
+  load_test_mesh(game_renderer);
 
   while(!game_state->endflag) {
     /* Update game state */
