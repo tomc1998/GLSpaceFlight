@@ -11,6 +11,7 @@
 
 #ifndef GAME_STATE_H
 #define GAME_STATE_H
+#include "vector.h"
 
 struct Input_State;
 
@@ -28,6 +29,7 @@ struct Game_State {
   int screen_h; 
   /** Game loop runs when endflag == 0 */
   int endflag;
+  vec3f cam_pos;
 };
 /**
    @brief Typedef for convenience

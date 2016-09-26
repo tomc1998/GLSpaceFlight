@@ -11,6 +11,8 @@
 #include "input_handler_glfw.h"
 #include "game_renderer.h"
 #include "mesh.h"
+#include "vector.h"
+#include "matrix.h"
 
 /**
    @fn GLFWwindow* init_glfw(const char* title, int screen_w, int screen_h)
@@ -72,7 +74,7 @@ int main(int argc, char** argv) {
 
   /* Create game state */
   game_state = (Game_State*) malloc(sizeof(Game_State));
-  init_game_state(game_state, 800, 600);
+  init_game_state(game_state, 1700, 1000);
   /* Create game window */
   window = init_glfw("GLSpaceFlight", game_state->screen_w, game_state->screen_h);
   /* Create control mapping */
@@ -83,7 +85,7 @@ int main(int argc, char** argv) {
   init_input_control_mapping_glfw(control_mapping, input_state);
   /* Create game renderer */
   game_renderer = (Game_Renderer*) malloc(sizeof(Game_Renderer));
-  init_game_renderer(game_renderer);
+  init_game_renderer(game_renderer, game_state);
 
   /* Set up input handler and assign key callbacks */
   set_input_handler_control_mapping(control_mapping);

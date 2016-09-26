@@ -9,6 +9,7 @@
 #ifndef GAME_RENDERER_H
 #define GAME_RENDERER_H
 #include <GLFW/glfw3.h>
+#include "vector.h"
 #include "mesh.h"
 
 struct Game_State;
@@ -23,8 +24,11 @@ struct Game_State;
 */
 struct Game_Renderer {
   GLuint test_shader_program;
+  vec3f cam_pos;
   float proj_mat[16];
+  float view_mat[16];
   GLuint shader_proj_mat_loc;
+  GLuint shader_view_mat_loc;
   Mesh* test_mesh;
 };
 
@@ -39,7 +43,7 @@ typedef struct Game_Renderer Game_Renderer;
    @memberof Game_Renderer
    @public
 */
-void init_game_renderer(Game_Renderer* game_renderer);
+void init_game_renderer(Game_Renderer* game_renderer, Game_State* s);
 
 /**
    @brief Frees any resource owned by Game_Renderer

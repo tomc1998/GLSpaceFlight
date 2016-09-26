@@ -15,6 +15,7 @@ set(PROJECT_SRCS
 	${PROJECT_SOURCE_DIR}/file.c
 	${PROJECT_SOURCE_DIR}/shader.c
 	${PROJECT_SOURCE_DIR}/matrix.c
+	${PROJECT_SOURCE_DIR}/vector.c
 	${PROJECT_SOURCE_DIR}/mesh.c
 	)
 
@@ -63,5 +64,7 @@ if ("${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC")
 elseif ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
 	SET_TARGET_PROPERTIES(GLSpaceFlight
 		PROPERTIES COMPILE_FLAGS "-Wall -Wpedantic -g")
+  # Link maths lib
+  target_link_libraries(GLSpaceFlight m)
 endif()
 

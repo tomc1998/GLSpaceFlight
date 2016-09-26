@@ -33,6 +33,36 @@ struct Digital_Input_State {
   /** True when control has just been pressed (rather than held) */
   int ctrl_brake_just_pressed;
 
+  /** Activate ship brakes when down */
+  int ctrl_fwd;
+  /** True when control has just been pressed (rather than held) */
+  int ctrl_fwd_just_pressed;
+
+  /** Activate ship brakes when down */
+  int ctrl_bkwd;
+  /** True when control has just been pressed (rather than held) */
+  int ctrl_bkwd_just_pressed;
+
+  /** Activate ship brakes when down */
+  int ctrl_right;
+  /** True when control has just been pressed (rather than held) */
+  int ctrl_right_just_pressed;
+
+  /** Activate ship brakes when down */
+  int ctrl_left;
+  /** True when control has just been pressed (rather than held) */
+  int ctrl_left_just_pressed;
+
+  /** Activate ship brakes when down */
+  int ctrl_up;
+  /** True when control has just been pressed (rather than held) */
+  int ctrl_up_just_pressed;
+
+  /** Activate ship brakes when down */
+  int ctrl_down;
+  /** True when control has just been pressed (rather than held) */
+  int ctrl_down_just_pressed;
+
   /** Quick exit game for debug */
   int ctrl_dbg_quit;
   /** True when control has just been pressed (rather than held) */
