@@ -9,7 +9,9 @@
    @brief Struct representing a 3D vector.
 */
 struct vec3f {
-  float x, y, z;
+  float x;
+  float y;
+  float z;
 };
 /**
    @brief Typedef for convenience 

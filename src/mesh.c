@@ -7,12 +7,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "mesh.h"
+/* Fuck windows */
+#define _CRT_SECURE_NO_WARNINGS
 
 Mesh* load_mesh_from_ai_mesh(const struct aiMesh* ai_mesh) {
   float* verts = NULL; /* Nicely formatted vert data */
   unsigned int* elements = NULL; /* Nicely formatted element data */
   Mesh* m; /* The mesh to load data into */
-  int ii;
+  unsigned ii;
 
   /* Turn ai vertex data into a float array */
   verts = (float*) malloc(sizeof(float)*3*ai_mesh->mNumVertices);

@@ -61,27 +61,22 @@ void apply_translation3f(float* matrix, const float x, const float y, const floa
 
 /* Just copying gluLookAt impl */
 void mat4_view_lookat(float* matrix, 
-                      const float x,  const float y,  const float z,
-                      const float cx, const float cy, const float cz,
-                      const float ux, const float uy, const float uz) {
+                      const vec3f* eye,
+                      const vec3f* centre,
+                      const vec3f* up_vec) {
   vec3f forward, side, up;
   /* matrix (param) is copied to this */
   float in_mat[16]; 
   /* Holds the transformation, which the matrix param is multiplied by. */
   float transform[16]; 
 
-  forward.x = cx - x;
-  forward.y = cy - y;
-  forward.z = cz - z;
-
-  up.x = ux;
-  up.y = uy;
-  up.z = uz;
-
+  forward.x = centre->x - eye->x;
+  forward.y = centre->y - eye->y;
+  forward.z = centre->z - eye->z;
   vec3fnor(&forward);
 
   /* Side = forward x up */
-  vec3fcross(&side, &forward, &up);
+  vec3fcross(&side, &forward, up_vec);
   vec3fnor(&side);
 
   /* Recompute up as: up = side x forward */
@@ -89,7 +84,6 @@ void mat4_view_lookat(float* matrix,
   vec3fnor(&up);
 
   /* Create an identity matrix */
-  create_mat4_identity(&(transform[0]));
   /* Fill this identity matrix with the transformation */
   transform[0] = side.x;
   transform[4] = side.y;
@@ -102,14 +96,21 @@ void mat4_view_lookat(float* matrix,
   transform[2]  = -forward.x;
   transform[6]  = -forward.y;
   transform[10] = -forward.z;
-  
-  transform[12] = -x;
-  transform[13] = -y;
-  transform[14] = -z;
+  transform[3] = transform[7] = transform[11] = 0;
+
+  transform[15] = 1;
+
+  /* transform[12] = 0; */
+  /* transform[13] = 0; */
+  /* transform[14] = 0; */
+  transform[12] = -vec3fdot(&side, eye);
+  transform[13] = -vec3fdot(&up, eye);
+  transform[14] = vec3fdot(&forward, eye);
   
   /* Multiply the in matrix by this one */
   memcpy(in_mat, matrix, sizeof(float)*16);
-  mat4_mult_mat4(matrix, in_mat, transform);
+  mat4_mult_mat4(matrix, transform, in_mat);
+  /* apply_translation3f(matrix, -eye->x, -eye->y, -eye->z); */
 }
 
 /* Potentially slow, but unless we find a bottleneck with matrix

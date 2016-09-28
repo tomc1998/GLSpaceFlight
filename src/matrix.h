@@ -6,6 +6,8 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
+struct vec3f;
+
 /**
    @brief Function to create a perspective projection matrix.
    @param[out] matrix The matrix to put the return data in. Caller allocated.
@@ -58,9 +60,9 @@ void apply_translation3f(float* matrix, const float x, const float y, const floa
    create_mat4_identity() for an identity matrix.
 */
 void mat4_view_lookat(float* matrix, 
-                      const float x,  const float y,  const float z,
-                      const float cx, const float cy, const float cz,
-                      const float ux, const float uy, const float uz);
+                      const struct vec3f* eye,
+                      const struct vec3f* centre,
+                      const struct vec3f* up_vec);
 
 /**
    @brief Multiplies 2 4D matrices together - a * b.

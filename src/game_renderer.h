@@ -8,6 +8,7 @@
 
 #ifndef GAME_RENDERER_H
 #define GAME_RENDERER_H
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "vector.h"
 #include "mesh.h"

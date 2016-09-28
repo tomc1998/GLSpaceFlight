@@ -1,6 +1,6 @@
 #include <glad/glad.h>
-#include <stdio.h>
 #include <GLFW/glfw3.h>
+#include <stdio.h>
 #include <string.h>
 #include <math.h>
 #include "shader.h"
@@ -10,6 +10,15 @@
 #include "game_renderer.h"
 
 void init_game_renderer(Game_Renderer* game_renderer, Game_State* s) {
+  float ratio; 
+  float fov; 
+  float top; 
+  float bottom; 
+  float left; 
+  float right; 
+  /* Can't use 'near' and 'far' on MSVC, reserved keywords */
+  float n = 1;
+  float f = 100;
   /* Test shaders */
   const char* v_shader = " \n \
 #version 330 core \n \
@@ -18,21 +27,17 @@ uniform mat4 view_mat; \n \
 layout(location = 0) in vec3 vert; \n \
 out vec3 col; \n \
 void main() { \n \
-gl_Position = proj_mat*view_mat*vec4(vert, 1); \n \
-col = vec3(0, 1-vert.z, vert.z+0.5); \n \
-} \n \
-  ";
+vec4 trans_pos = proj_mat*view_mat*vec4(vert, 1); \n \
+gl_Position = trans_pos; \n \
+col = vec3(0, 1-trans_pos.z, trans_pos.z+0.5); \n \
+} \n ";
   const char* f_shader = " \n \
 #version 330 core \n \
 out vec3 color; \n \
 in vec3 col; \n \
 void main(){ \n \
   color = col; \n \
-} \n \
-  ";
-  float ratio, fov, top, bottom, left, right, near, far;
-  near = 2;
-  far = 100;
+} \n ";
 
   /* Load test shader */
   game_renderer->test_shader_program =
@@ -43,13 +48,13 @@ void main(){ \n \
   glUseProgram(game_renderer->test_shader_program);
 
   /* Create a projection matrix */
-  ratio = s->screen_w/s->screen_h;
-  fov = 60; 
-  top = -tan(fov * M_PI / 360.0f) * near;
+  ratio = (float)s->screen_w/(float)s->screen_h;
+  fov = 45; 
+  top = (float) (-tan(fov * 3.141f / 360.0f) * n);
   bottom = -top;
   left = ratio * top;
   right = ratio * bottom;
-  create_persp_proj_mat(&(game_renderer->proj_mat[0]), left, right, top, bottom, near, far);
+  create_persp_proj_mat(&(game_renderer->proj_mat[0]), left, right, top, bottom, n, f);
   /* Set initial camera position */
   init_vec3f(&s->cam_pos, 0, 0, 5);
 
@@ -84,14 +89,20 @@ void render_mesh(Game_Renderer* game_renderer, Mesh* m) {
 }
 
 void render_game(Game_Renderer* game_renderer, Game_State* s) {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  vec3f centre;
+  vec3f up;
+  init_vec3f(&centre, 0, 0, 0);
+  init_vec3f(&up, 0, 1, 0);
 
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  
   /* Update view mat */
   create_mat4_identity(&(game_renderer->view_mat[0]));
   mat4_view_lookat(&(game_renderer->view_mat[0]),
-                   s->cam_pos.x, s->cam_pos.y, s->cam_pos.z,
-                   0, 0, 0,
-                   0, 1, 0);
+                   &s->cam_pos,
+                   &centre,
+                   &up);
+                   
   glUniformMatrix4fv(game_renderer->shader_view_mat_loc,
                      1,
                      GL_FALSE,

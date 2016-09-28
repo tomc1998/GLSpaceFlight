@@ -5,6 +5,7 @@
 
 #ifndef SHADER_H
 #define SHADER_H
+#include <GLFW/glfw3.h>
 
 /**
    @brief Loads GLSL source code from memory, then compiles & links
